@@ -6,15 +6,22 @@ const defaultSearchParams: Record<string, string> = { page: '0', limit: '10' };
 
 export function Posts() {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const { isSuccess, data: posts } = useGetPostsQuery({
+	const {
+		isError,
+		isSuccess,
+		error,
+		data: posts
+	} = useGetPostsQuery({
 		page: searchParams.get('page') || defaultSearchParams.page,
-		limit: searchParams.get('limit') || defaultSearchParams.limit
+		limit: searchParams.get('limit') || defaultSearchParams.limit,
+		user: searchParams.get('user'),
+		tag: searchParams.get('tag')
 	});
 
 	useEffect(() => {
 		for (const param in defaultSearchParams) {
 			if (!searchParams.has(param)) {
-				searchParams.append(param, defaultSearchParams[param]);
+				searchParams.set(param, defaultSearchParams[param]);
 			}
 		}
 
