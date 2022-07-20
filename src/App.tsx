@@ -1,11 +1,13 @@
-import { useGetPostsQuery } from './services/dummyApi';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Posts } from './Posts';
 
 export function App() {
-	const { isSuccess, data: posts } = useGetPostsQuery({ page: 0, limit: 20 });
-
-	if (isSuccess) {
-		console.log(posts);
-	}
-
-	return null;
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<Navigate to={'/posts'} replace={true} />} />
+				<Route path="posts" element={<Posts />} />
+			</Routes>
+		</BrowserRouter>
+	);
 }

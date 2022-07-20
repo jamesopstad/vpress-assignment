@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { List, PostPreview } from './models';
 
 interface GetPostsArg {
-	page: number;
-	limit: number;
+	page: string;
+	limit: string;
 }
 
 export const dummyApi = createApi({
@@ -18,7 +18,7 @@ export const dummyApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getPosts: builder.query<List<PostPreview>, GetPostsArg>({
-			query: ({ page, limit }) => `post?page=${page}limit=${limit}`
+			query: ({ page, limit }) => `post?page=${page}&limit=${limit}`
 		})
 	})
 });
