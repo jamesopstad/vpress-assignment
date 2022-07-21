@@ -5,28 +5,30 @@ import type { PostPreview } from '../../services/types';
 
 export function PreviewPost({
 	post,
-	isEven
+	isOdd
 }: {
 	post: PostPreview;
-	isEven: boolean;
+	isOdd: boolean;
 }) {
 	return (
 		<Link to={`/post/${post.id}`}>
 			<section
 				className={classNames(
 					'flex items-center px-2 py-6 gap-3 rounded-md hover:bg-gray-100',
-					isEven && 'justify-between'
+					isOdd && 'justify-between'
 				)}
 			>
 				<img
 					src={post.image}
 					className={classNames(
 						'h-40 md:h-60 rounded-md',
-						isEven && 'order-last'
+						isOdd && 'order-last'
 					)}
 				/>
 				<div className="flex flex-col justify-between">
-					{new Date(post.publishDate).toLocaleDateString()}
+					<span className="font-medium">
+						{new Date(post.publishDate).toLocaleDateString()}
+					</span>
 					<p className="my-8">{post.text}</p>
 					<span className="flex items-center gap-0.5">
 						<ThumbUpIcon className="w-5 h-5" />

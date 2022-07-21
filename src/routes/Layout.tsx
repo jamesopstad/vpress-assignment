@@ -8,7 +8,10 @@ export function Layout() {
 				<NavLink
 					to="posts"
 					className={({ isActive }) =>
-						classNames('text-2xl font-bold', isActive && 'text-indigo-600')
+						classNames(
+							'text-2xl font-bold hover:text-indigo-600',
+							isActive && 'text-indigo-600'
+						)
 					}
 				>
 					Posts

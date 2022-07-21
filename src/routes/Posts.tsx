@@ -1,23 +1,28 @@
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useGetPostsQuery } from '../services/dummyApi';
 import { useScroll } from '../hooks';
+import { Loading } from './components/Loading';
+import { DisplayError } from './DisplayError';
+import { Select } from './components/Select';
 import { PreviewPost } from './components/PreviewPost';
 import { PageNav } from './components/PageNav';
-import { DisplayError } from './DisplayError';
 import type { List } from '../services/types';
 
 const defaultSearchParams = { page: '0', limit: '20' };
+
+const limitOptions = ['5', '10', '20'];
 
 function setShowing({ data, page, limit }: List) {
 	const startIndex = page * limit;
 	const endIndex = startIndex + data.length;
 
-	return { startIndex, endIndex };
+	return { startIndex: startIndex + 1, endIndex };
 }
 
 export function Posts() {
 	const [searchParams, setSearchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const page = searchParams.get('page') || defaultSearchParams.page;
 	const limit = searchParams.get('limit') || defaultSearchParams.limit;
 	const {
@@ -36,11 +41,11 @@ export function Posts() {
 	}, [searchParams]);
 
 	if (isLoading) {
-		return null;
+		return <Loading />;
 	}
 
 	if (isError) {
-		return null;
+		return <DisplayError error={(error as Error).message} />;
 	}
 
 	if (!posts) {
@@ -57,17 +62,23 @@ export function Posts() {
 
 	return (
 		<div>
-			<header>
+			<header className="pt-2 flex justify-between items-center">
 				<p>
 					Showing {startIndex} to {endIndex} of {posts.total} results
 				</p>
+				<Select
+					items={limitOptions}
+					selectedItem={limit}
+					label="Items per page"
+					onChange={(limit) => navigate(`/posts?limit=${limit}`)}
+				/>
 			</header>
-			<main className="py-2">
+			<main className="py-4">
 				{posts.data.map((post, i) => (
-					<PreviewPost post={post} isEven={!!(i % 2)} key={post.id} />
+					<PreviewPost post={post} isOdd={!!(i % 2)} key={post.id} />
 				))}
 			</main>
-			<footer className="">
+			<footer>
 				<PageNav list={posts} maxPage={maxPage} isFetching={isFetching} />
 			</footer>
 		</div>
