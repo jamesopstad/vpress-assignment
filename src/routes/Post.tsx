@@ -12,12 +12,8 @@ export function Post() {
 		return <Loading />;
 	}
 
-	if (isError) {
+	if (isError || !post) {
 		return <DisplayError error={(error as Error).message} />;
-	}
-
-	if (!post) {
-		return null;
 	}
 
 	return (

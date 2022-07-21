@@ -1,10 +1,4 @@
-import {
-	BrowserRouter,
-	Routes,
-	Route,
-	Outlet,
-	Navigate
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './routes/Layout';
 import { Posts } from './routes/Posts';
 import { Post } from './routes/Post';

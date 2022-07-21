@@ -10,7 +10,6 @@ import { PageNav } from './components/PageNav';
 import type { List } from '../services/types';
 
 const defaultSearchParams = { page: '0', limit: '20' };
-
 const limitOptions = ['5', '10', '20'];
 
 function setShowing({ data, page, limit }: List) {
@@ -44,12 +43,8 @@ export function Posts() {
 		return <Loading />;
 	}
 
-	if (isError) {
+	if (isError || !posts) {
 		return <DisplayError error={(error as Error).message} />;
-	}
-
-	if (!posts) {
-		return null;
 	}
 
 	const maxPage = Math.floor(posts.total / posts.limit);
@@ -62,7 +57,7 @@ export function Posts() {
 
 	return (
 		<div>
-			<header className="pt-2 flex justify-between items-center">
+			<header className="px-2 pt-2 flex justify-between items-center">
 				<p>
 					Showing {startIndex} to {endIndex} of {posts.total} results
 				</p>
