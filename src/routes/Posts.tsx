@@ -52,13 +52,16 @@ export function Posts() {
 	const { startIndex, endIndex } = setShowing(posts);
 
 	return (
-		<>
-			<p>
-				Showing {startIndex} to {endIndex} of {posts.total} results
-			</p>
-			<footer>
+		<div>
+			<header>
+				<p>
+					Showing {startIndex} to {endIndex} of {posts.total} results
+				</p>
+			</header>
+			<main className="h-60"></main>
+			<footer className="mx-12">
 				<PageNav list={posts} maxPage={maxPage} />
 			</footer>
-		</>
+		</div>
 	);
 }

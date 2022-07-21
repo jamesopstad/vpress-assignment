@@ -1,4 +1,9 @@
 import { Link } from 'react-router-dom';
+import {
+	ArrowNarrowLeftIcon,
+	ArrowNarrowRightIcon
+} from '@heroicons/react/solid';
+import { classNames } from '../../utils';
 import type { List } from '../../services/types';
 
 function setPageLinks(page: number, maxPage: number) {
@@ -30,22 +35,75 @@ function setPageLinks(page: number, maxPage: number) {
 	return values;
 }
 
-export function PageNav({ list, maxPage }: { list: List; maxPage: number }) {
-	const pageLinks = setPageLinks(list.page, maxPage);
-
-	return (
+function NextOrPrevious({
+	type,
+	list,
+	isDisabled
+}: {
+	type: 'Next' | 'Previous';
+	list: List;
+	isDisabled: boolean;
+}) {
+	const content = (
 		<>
-			{list.page !== 0 && (
-				<Link to={`?page=${list.page - 1}&limit=${list.limit}`}>Previous</Link>
-			)}
-			{pageLinks.map((value, i) => (
-				<p key={i} className={`${value === list.page ? 'font-bold' : ''}`}>
-					{value === -1 ? '...' : value + 1}
-				</p>
-			))}
-			{list.page !== maxPage && (
-				<Link to={`?page=${list.page + 1}&limit=${list.limit}`}>Next</Link>
-			)}
+			{type === 'Previous' && <ArrowNarrowLeftIcon className="w-5 h-5" />}
+			{type}
+			{type === 'Next' && <ArrowNarrowRightIcon className="w-5 h-5" />}
 		</>
+	);
+
+	return isDisabled ? (
+		<span className="flex items-center gap-x-2 text-gray-300 cursor-default">
+			{content}
+		</span>
+	) : (
+		<Link
+			to={`?page=${list.page + (type === 'Next' ? 1 : -1)}&limit=${list.limit}`}
+			className="flex items-center gap-x-2 p-2 hover:bg-gray-200 hover:text-indigo-600"
+		>
+			{content}
+		</Link>
+	);
+}
+
+export function PageNav({ list, maxPage }: { list: List; maxPage: number }) {
+	return (
+		<div className="flex justify-evenly border-t-2 text-gray-600">
+			<NextOrPrevious
+				type="Previous"
+				list={list}
+				isDisabled={list.page === 0}
+			/>
+			<div className="hidden md:flex">
+				{setPageLinks(list.page, maxPage).map((value, i) => {
+					const isEllipsis = value === -1;
+					const isCurrent = value === list.page;
+					const displayValue = value + 1;
+
+					return isEllipsis ? (
+						<span className="p-2 cursor-default" key={i}>
+							...
+						</span>
+					) : (
+						<Link
+							to={`?page=${value}&limit=${list.limit}`}
+							className={classNames(
+								'p-2 hover:bg-gray-200',
+								isCurrent &&
+									'mt-[-2px] font-bold text-indigo-600 border-t-2 border-indigo-600'
+							)}
+							key={i}
+						>
+							{displayValue}
+						</Link>
+					);
+				})}
+			</div>
+			<NextOrPrevious
+				type="Next"
+				list={list}
+				isDisabled={list.page === maxPage}
+			/>
+		</div>
 	);
 }
