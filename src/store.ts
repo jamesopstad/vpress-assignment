@@ -7,7 +7,9 @@ export const store = configureStore({
 		[dummyApi.reducerPath]: dummyApi.reducer
 	},
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(dummyApi.middleware)
+		getDefaultMiddleware({
+			serializableCheck: false
+		}).concat(dummyApi.middleware)
 });
 
 setupListeners(store.dispatch);

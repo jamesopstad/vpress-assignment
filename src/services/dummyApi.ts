@@ -1,11 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { List, PostPreview } from './models';
+import type { List, PostPreview } from './types';
 
 interface GetPostsArg {
 	page: string;
 	limit: string;
-	user: string | null;
-	tag: string | null;
 }
 
 export const dummyApi = createApi({
@@ -20,15 +18,7 @@ export const dummyApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getPosts: builder.query<List<PostPreview>, GetPostsArg>({
-			query: ({ page, limit, user, tag }) => {
-				const searchParams = new URLSearchParams({ page, limit });
-
-				return user
-					? `user/${user}/post?${searchParams}`
-					: tag
-					? `tag/${tag}/post?${searchParams}`
-					: `post?${searchParams}`;
-			}
+			query: ({ page, limit }) => `post?page=${page}&limit=${limit}`
 		})
 	})
 });

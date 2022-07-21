@@ -1,4 +1,4 @@
-export interface List<T> {
+export interface List<T = unknown> {
 	data: T[];
 	total: number;
 	page: number;
