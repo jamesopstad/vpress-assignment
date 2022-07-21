@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { List, PostPreview } from './types';
+import type { List, PostPreview, Post } from './types';
 
 interface GetPostsArg {
 	page: string;
@@ -19,8 +19,11 @@ export const dummyApi = createApi({
 	endpoints: (builder) => ({
 		getPosts: builder.query<List<PostPreview>, GetPostsArg>({
 			query: ({ page, limit }) => `post?page=${page}&limit=${limit}`
+		}),
+		getPost: builder.query<Post, string>({
+			query: (id) => `post/${id}`
 		})
 	})
 });
 
-export const { useGetPostsQuery } = dummyApi;
+export const { useGetPostsQuery, useGetPostQuery } = dummyApi;

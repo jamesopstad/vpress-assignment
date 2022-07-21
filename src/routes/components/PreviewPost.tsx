@@ -20,7 +20,10 @@ export function PreviewPost({
 			>
 				<img
 					src={post.image}
-					className={classNames('h-60 rounded-md', isEven && 'order-last')}
+					className={classNames(
+						'h-40 md:h-60 rounded-md',
+						isEven && 'order-last'
+					)}
 				/>
 				<div className="flex flex-col justify-between">
 					{new Date(post.publishDate).toLocaleDateString()}
