@@ -53,26 +53,34 @@ function NextOrPrevious({
 	);
 
 	return isDisabled ? (
-		<span className="flex items-center gap-x-2 text-gray-300 cursor-default">
+		<span className="flex items-center gap-x-3 p-3 text-gray-300 cursor-default">
 			{content}
 		</span>
 	) : (
 		<Link
 			to={`?page=${list.page + (type === 'Next' ? 1 : -1)}&limit=${list.limit}`}
-			className="flex items-center gap-x-2 p-2 hover:bg-gray-200 hover:text-indigo-600"
+			className="flex items-center gap-x-2 p-3 hover:bg-gray-100 hover:text-indigo-600"
 		>
 			{content}
 		</Link>
 	);
 }
 
-export function PageNav({ list, maxPage }: { list: List; maxPage: number }) {
+export function PageNav({
+	list,
+	maxPage,
+	isFetching
+}: {
+	list: List;
+	maxPage: number;
+	isFetching: boolean;
+}) {
 	return (
-		<div className="flex justify-evenly border-t-2 text-gray-600">
+		<nav className="flex justify-evenly pb-2 border-t-2">
 			<NextOrPrevious
 				type="Previous"
 				list={list}
-				isDisabled={list.page === 0}
+				isDisabled={list.page === 0 || isFetching}
 			/>
 			<div className="hidden md:flex">
 				{setPageLinks(list.page, maxPage).map((value, i) => {
@@ -81,14 +89,14 @@ export function PageNav({ list, maxPage }: { list: List; maxPage: number }) {
 					const displayValue = value + 1;
 
 					return isEllipsis ? (
-						<span className="p-2 cursor-default" key={i}>
+						<span className="p-3 cursor-default" key={i}>
 							...
 						</span>
 					) : (
 						<Link
 							to={`?page=${value}&limit=${list.limit}`}
 							className={classNames(
-								'p-2 hover:bg-gray-200',
+								'p-3 hover:bg-gray-200',
 								isCurrent &&
 									'mt-[-2px] font-bold text-indigo-600 border-t-2 border-indigo-600'
 							)}
@@ -102,8 +110,8 @@ export function PageNav({ list, maxPage }: { list: List; maxPage: number }) {
 			<NextOrPrevious
 				type="Next"
 				list={list}
-				isDisabled={list.page === maxPage}
+				isDisabled={list.page === maxPage || isFetching}
 			/>
-		</div>
+		</nav>
 	);
 }

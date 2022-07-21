@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useGetPostsQuery } from '../services/dummyApi';
+import { useScroll } from '../hooks';
+import { PreviewPost } from './components/PreviewPost';
 import { PageNav } from './components/PageNav';
 import { DisplayError } from './DisplayError';
 import type { List } from '../services/types';
@@ -20,16 +22,18 @@ export function Posts() {
 	const limit = searchParams.get('limit') || defaultSearchParams.limit;
 	const {
 		isLoading,
+		isFetching,
 		isError,
 		error,
 		data: posts
 	} = useGetPostsQuery({ page, limit });
+	useScroll(posts?.page);
 
 	useEffect(() => {
 		searchParams.set('page', page);
 		searchParams.set('limit', limit);
 		setSearchParams(searchParams, { replace: true });
-	}, []);
+	}, [searchParams]);
 
 	if (isLoading) {
 		return null;
@@ -58,9 +62,13 @@ export function Posts() {
 					Showing {startIndex} to {endIndex} of {posts.total} results
 				</p>
 			</header>
-			<main className="h-60"></main>
-			<footer className="mx-12">
-				<PageNav list={posts} maxPage={maxPage} />
+			<main className="py-2">
+				{posts.data.map((post, i) => (
+					<PreviewPost post={post} isEven={!!(i % 2)} key={post.id} />
+				))}
+			</main>
+			<footer className="">
+				<PageNav list={posts} maxPage={maxPage} isFetching={isFetching} />
 			</footer>
 		</div>
 	);
