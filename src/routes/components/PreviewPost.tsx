@@ -21,7 +21,7 @@ export function PreviewPost({
 				<img
 					src={post.image}
 					className={classNames(
-						'h-32 object-contain md:h-60 rounded-md',
+						'h-32 md:h-60 rounded-md',
 						isOdd && 'order-last'
 					)}
 				/>

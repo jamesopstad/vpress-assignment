@@ -20,7 +20,7 @@ export function Post() {
 		<article className="px-2 py-6">
 			<img
 				src={post.image}
-				className="float-left object-contain mr-4 mb-4 rounded-md h-96"
+				className="float-left mr-4 mb-4 max-h-96 rounded-md"
 			/>
 			<span className="font-medium">
 				{new Date(post.publishDate).toLocaleDateString()}
